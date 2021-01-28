@@ -1,5 +1,8 @@
 import React, { useState,useEffect } from "react"
+import Button from 'react-bootstrap/Button'
 import facade from "./ApiFacade";
+
+import './Doc.css'
  
 function LogIn({ login }) {
   const init = { username: "", password: "" };
@@ -14,12 +17,12 @@ function LogIn({ login }) {
   }
  
   return (
-    <div>
+    <div className="security">
       <h2>Login</h2>
       <form onChange={onChange} >
         <input placeholder="User Name" id="username" />
         <input placeholder="Password" id="password" />
-        <button onClick={performLogin}>Login</button>
+        <Button onClick={performLogin}>Login</Button>
       </form>
     </div>
   )
@@ -42,27 +45,27 @@ function LoggedIn() {
 }
  
 function Security() {
-  const [loggedIn, setLoggedIn] = useState(false)
- 
+
   const logout = () => { 
     facade.logout();
-    setLoggedIn(false);
+    document.location.reload()
   } 
   const login = (user, pass) => {
-    facade.login(user,pass)
-    .then(res =>setLoggedIn(true));
-   
-  } 
- 
+    facade.login(user,pass).finally(() => {document.location.reload()})
+    
+
+  }
+
   return (
-    <div>
-      {!loggedIn ? (<LogIn login={login} />) :
-        (<div>
+    <div className="security">
+      {!facade.loggedIn() ? (<LogIn login={login} />) :
+        (<div className="security">
           <LoggedIn />
-          <button onClick={logout}>Logout</button>
+          <Button onClick={logout}>Logout</Button>
         </div>)}
     </div>
   )
  
 }
+
 export default Security;

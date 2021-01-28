@@ -1,5 +1,5 @@
 import { decode } from 'jsonwebtoken';
-const URL = "http://localhost:8080/jpareststarter";
+const URL = "https://hoooya.dk/startcode";
 
 function handleHttpErrors(res) {
   if (!res.ok) {
@@ -38,7 +38,7 @@ function apiFacade() {
 
   const login = (user, password) => {
     const options = makeOptions("POST", true, { username: user, password: password });
-    return fetch(URL + "/api/login", options)
+    return fetch(`${URL}/api/login`, options)
       .then(handleHttpErrors)
       .then(res => {
         setToken(res.token);
@@ -54,6 +54,56 @@ function apiFacade() {
 
   const fetchAllData = () => {
     return fetch(`${URL}/api/info/data`).then(handleHttpErrors);
+  }
+
+  const fetchCourses = () => {
+    const option = makeOptions("GET");
+    return fetch(`${URL}/api/course/all`, option).then(handleHttpErrors);
+  }
+
+  const AddCourse = (body) => {
+    const option = makeOptions("POST", true, body);
+    return fetch(`${URL}/api/course`, option, ).then(handleHttpErrors);
+  }
+
+  const fetchClasses = () => {
+    const option = makeOptions("GET");
+    return fetch(`${URL}/api/class/all`, option).then(handleHttpErrors);
+  }
+
+  const AddClass = (body) => {
+    const option = makeOptions("POST", true, body);
+    return fetch(`${URL}/api/class`, option, ).then(handleHttpErrors);
+  }
+
+  const fetchTeachers = () => {
+    const option = makeOptions("GET");
+    return fetch(`${URL}/api/teacher/all`, option).then(handleHttpErrors);
+  }
+
+  const AddTeacher = (body) => {
+    const option =  makeOptions("POST", true, body);
+    return fetch(`${URL}/api/teacher`, option).then(handleHttpErrors);
+  }
+
+  const AddClassToCourse = (body) => {
+    const option =  makeOptions("POST", true, body);
+    return fetch(`${URL}/api/course/addclass`, option).then(handleHttpErrors);
+  }
+
+  const AddTeacherToClass = (body) => {
+    const option =  makeOptions("POST", true, body);
+    return fetch(`${URL}/api/class/addteacher`, option).then(handleHttpErrors);
+  }
+
+  const EditCourse = (body) => {
+    const option =  makeOptions("PUT", true, body);
+    return fetch(`${URL}/api/course`, option).then(handleHttpErrors);
+  }
+
+  const fetchClassesWithInfo = () => {
+    const option = makeOptions("GET");
+    return fetch(`${URL}/api/class/allwithinfo`, option).then(handleHttpErrors);
   }
 
   const makeOptions = (method, addToken, body) => {
@@ -80,7 +130,17 @@ function apiFacade() {
     login,
     logout,
     fetchData,
-    fetchAllData
+    fetchAllData,
+    fetchCourses,
+    AddCourse,
+    AddClass,
+    fetchClasses,
+    fetchTeachers,
+    AddTeacher,
+    AddClassToCourse,
+    AddTeacherToClass,
+    EditCourse,
+    fetchClassesWithInfo
   }
 }
 const facade = apiFacade();
